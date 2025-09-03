@@ -1,0 +1,5 @@
+{
+  "name": "오늘 점심 뭐 먹지?",
+  "description": "A fun, interactive lunch recommendation app that suggests three personalized meal options with AI-generated images.",
+  "requestFramePermissions": []
+}
