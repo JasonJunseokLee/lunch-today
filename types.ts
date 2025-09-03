@@ -3,7 +3,8 @@ export type Step = 'start' | 'questioning' | 'loading' | 'result';
 
 export interface Recommendation {
   name: string;
-  imageUrl: string;
+  description: string;
+  price: string;
 }
 
 export interface Question {

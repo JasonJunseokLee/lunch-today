@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import { getLunchRecommendations, generateFoodImage } from './services/geminiService';
+import { getLunchRecommendations } from './services/geminiService';
 import { Recommendation, Step } from './types';
 import { QUESTIONS } from './constants';
 import StartScreen from './components/StartScreen';
@@ -34,20 +34,12 @@ const App: React.FC = () => {
   const fetchRecommendations = useCallback(async (finalAnswers: string[]) => {
     setError(null);
     try {
-      const foodNames = await getLunchRecommendations(finalAnswers);
-      if (foodNames.length === 0) {
+      const recommendations = await getLunchRecommendations(finalAnswers);
+      if (recommendations.length === 0) {
         throw new Error("추천 메뉴를 생성하지 못했습니다.");
       }
       
-      const imagePromises = foodNames.map(name => generateFoodImage(name));
-      const imageUrls = await Promise.all(imagePromises);
-
-      const finalRecommendations = foodNames.map((name, index) => ({
-        name,
-        imageUrl: imageUrls[index],
-      }));
-      
-      setRecommendations(finalRecommendations);
+      setRecommendations(recommendations);
       setStep('result');
     } catch (err) {
       console.error(err);

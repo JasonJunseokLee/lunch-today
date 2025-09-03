@@ -22,9 +22,9 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ recommendations, error, onR
           <span className="block sm:inline">{error}</span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8">
-          {recommendations.map((rec) => (
-            <RecommendationCard key={rec.name} recommendation={rec} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mb-8">
+          {recommendations.map((rec, index) => (
+            <RecommendationCard key={`${rec.name}-${index}`} recommendation={rec} />
           ))}
         </div>
       )}
