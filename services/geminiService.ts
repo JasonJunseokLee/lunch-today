@@ -1,13 +1,18 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
+const getApiKey = () => {
+  return process.env.API_KEY || process.env.GEMINI_API_KEY || '';
+};
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const apiKey = getApiKey();
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export const getLunchRecommendations = async (answers: string[]): Promise<string[]> => {
   try {
+    if (!ai) {
+      throw new Error("API 키가 설정되지 않았습니다. 환경 변수를 확인해주세요.");
+    }
+
     const prompt = `
       사용자의 다음 답변을 바탕으로 점심 메뉴 3가지를 추천해주세요:
       1. 오늘의 기분/상황: ${answers[0]}
@@ -53,6 +58,11 @@ export const getLunchRecommendations = async (answers: string[]): Promise<string
 
 export const generateFoodImage = async (foodName: string): Promise<string> => {
   try {
+    if (!ai) {
+      // Return placeholder if no API key
+      return `https://picsum.photos/seed/${foodName}/500/300`;
+    }
+
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image-preview',
       contents: { 
